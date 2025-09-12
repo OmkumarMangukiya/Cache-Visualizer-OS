@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/cache_test.dir/cpp_logic/src/test_main.cpp.o -o cache_test  -Wl,-rpath,/home/omman/Documents/Dev/osProject/cache-simulator/build cache_logic.so 

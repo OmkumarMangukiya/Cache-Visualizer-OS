@@ -1,0 +1,7 @@
+# Simple memory trace for testing
+# Format: Operation Address [Data]
+R 0x1000
+R 0x1040
+R 0x1080
+R 0x1040
+R 0x1000

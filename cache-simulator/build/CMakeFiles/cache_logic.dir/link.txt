@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -O3 -DNDEBUG -shared -Wl,-soname,cache_logic.so -o cache_logic.so CMakeFiles/cache_logic.dir/cpp_logic/src/Bridge.cpp.o CMakeFiles/cache_logic.dir/cpp_logic/src/Cache.cpp.o CMakeFiles/cache_logic.dir/cpp_logic/src/policies/LruPolicy.cpp.o CMakeFiles/cache_logic.dir/cpp_logic/src/test_main.cpp.o 
