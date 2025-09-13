@@ -1,5 +1,5 @@
 #include "simulator/Cache.h"
-#include "simulator/CacheHierarchy.h"
+// #include "simulator/CacheHierarchy.h"
 #include "simulator/policies/LruPolicy.h"
 #include <string>
 #include <sstream>

@@ -1,8 +1,9 @@
 #include "simulator/policies/LruPolicy.h"
 #include <algorithm>
 #include <climits>
-
-void LruPolicy::onAccess(int set_index, int way, char ) {
+using namespace std;
+void LruPolicy::onAccess(int set_index, int way, char)
+{
     ensureSetExists(set_index, lru_counters[set_index].size());
     lru_counters[set_index][way] = ++global_counter;
 }
@@ -29,11 +30,11 @@ int LruPolicy::findVictim(int set_index, int associativity) {
 }
 
 void LruPolicy::reset(int set_index, int associativity) {
-    lru_counters[set_index] = std::vector<int>(associativity, 0);
+    lru_counters[set_index] =vector<int>(associativity, 0);
 }
 
 void LruPolicy::ensureSetExists(int set_index, int associativity) {
     if (lru_counters.find(set_index) == lru_counters.end()) {
-        lru_counters[set_index] = std::vector<int>(associativity, 0);
+        lru_counters[set_index] =vector<int>(associativity, 0);
     }
 }
