@@ -2,21 +2,18 @@
 #include <sstream>
 #include <iomanip>
 #include <memory>
-
-HierarchicalCache::HierarchicalCache(const LevelConfig& l1_cfg, const LevelConfig& l2_cfg,
-                                   const LevelConfig& l3_cfg, int memory_time, bool inclusive)
+using namespace std;
+HierarchicalCache::HierarchicalCache(const LevelConfig &l1_cfg, const LevelConfig &l2_cfg,
+                                     const LevelConfig &l3_cfg, int memory_time, bool inclusive)
     : l1_config(l1_cfg), l2_config(l2_cfg), l3_config(l3_cfg),
       main_memory_access_time(memory_time), inclusive_policy(inclusive),
       total_requests(0), l1_hits(0), l2_hits(0), l3_hits(0), main_memory_accesses(0),
-      total_access_time_accumulated(0) {
+      total_access_time_accumulated(0)
+{
 
-
-    l1_cache.reset(new SetAssociativeCache(l1_cfg.cache_size, l1_cfg.block_size, l1_cfg.associativity,
-                                          l1_cfg.write_policy, l1_cfg.write_miss_policy));
-    l2_cache.reset(new SetAssociativeCache(l2_cfg.cache_size, l2_cfg.block_size, l2_cfg.associativity,
-                                          l2_cfg.write_policy, l2_cfg.write_miss_policy));
-    l3_cache.reset(new SetAssociativeCache(l3_cfg.cache_size, l3_cfg.block_size, l3_cfg.associativity,
-                                          l3_cfg.write_policy, l3_cfg.write_miss_policy));
+    l1_cache.reset(new SetAssociativeCache(l1_cfg.cache_size, l1_cfg.block_size, l1_cfg.associativity));
+    l2_cache.reset(new SetAssociativeCache(l2_cfg.cache_size, l2_cfg.block_size, l2_cfg.associativity));
+    l3_cache.reset(new SetAssociativeCache(l3_cfg.cache_size, l3_cfg.block_size, l3_cfg.associativity));
 
     std::cout << "Hierarchical Cache System Initialized:" << std::endl;
     std::cout << "L1: " << l1_cfg.cache_size << "B, " << l1_cfg.associativity << "-way, " << l1_cfg.access_time << " cycles, "

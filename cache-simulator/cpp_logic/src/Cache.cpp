@@ -1,9 +1,10 @@
 #include "simulator/Cache.h"
 #include <cstdlib>
 #include <ctime>
-
+using namespace std;
 SetAssociativeCache::SetAssociativeCache(int cache_size, int block_size, int associativity,
-                                         ReplacementPolicy rp, WritePolicy wp, WriteMissPolicy wmp) {
+                                         ReplacementPolicy rp, WritePolicy wp, WriteMissPolicy wmp)
+{
 
     config.cache_size = cache_size;
     config.block_size = block_size;
@@ -67,9 +68,9 @@ bool SetAssociativeCache::accessMemory(unsigned int address) {
 
         updateReplacementCounters(set, hit_line);
 
-        std::cout << "CACHE HIT: Address 0x" << std::hex << address
-                  << " (Tag: 0x" << tag << ", Set: " << std::dec << set_index
-                  << ", Way: " << hit_line << ", Offset: " << offset << ")" << std::endl;
+        cout << "CACHE HIT: Address 0x" << hex << address
+                  << " (Tag: 0x" << tag << ", Set: " << dec << set_index
+                  << ", Way: " << hit_line << ", Offset: " << offset << ")" << endl;
 
         return true;
     } else {
@@ -97,10 +98,10 @@ bool SetAssociativeCache::accessMemory(unsigned int address) {
                 set.lines[empty_line].data[i] = rand() % 1000;
             }
 
-            std::cout << "COMPULSORY MISS: Address 0x" << std::hex << address
-                      << " (Tag: 0x" << tag << ", Set: " << std::dec << set_index
+            cout << "COMPULSORY MISS: Address 0x" << hex << address
+                      << " (Tag: 0x" << tag << ", Set: " << dec << set_index
                       << ", Way: " << empty_line << ", Offset: " << offset
-                      << ") - Loading into empty line" << std::endl;
+                      << ") - Loading into empty line" << endl;
         } else {
 
             conflict_misses++;
@@ -112,18 +113,18 @@ bool SetAssociativeCache::accessMemory(unsigned int address) {
             last_access.evicted_line_index = evict_line;
             last_access.evicted_tag = set.lines[evict_line].tag;
 
-            std::cout << "CONFLICT MISS: Address 0x" << std::hex << address
-                      << " (Tag: 0x" << tag << ", Set: " << std::dec << set_index
+            cout << "CONFLICT MISS: Address 0x" << hex << address
+                      << " (Tag: 0x" << tag << ", Set: " << dec << set_index
                       << ", Way: " << evict_line << ", Offset: " << offset
-                      << ") - Evicting tag 0x" << std::hex << set.lines[evict_line].tag
-                      << std::dec << std::endl;
+                      << ") - Evicting tag 0x" << hex << set.lines[evict_line].tag
+                      << dec << endl;
 
 
             if (config.write_policy == WRITE_BACK && set.lines[evict_line].dirty) {
                 writebacks++;
                 dirty_evictions++;
                 last_access.was_dirty_eviction = true;
-                std::cout << "WRITEBACK: Evicted dirty line written to memory" << std::endl;
+                cout << "WRITEBACK: Evicted dirty line written to memory" << endl;
             }
 
 
@@ -175,15 +176,15 @@ bool SetAssociativeCache::writeMemory(unsigned int address, int data) {
 
         if (config.write_policy == WRITE_THROUGH) {
 
-            std::cout << "WRITE HIT (Write-Through): Address 0x" << std::hex << address
-                      << " (Tag: 0x" << tag << ", Set: " << std::dec << set_index
-                      << ", Way: " << hit_line << ") - Writing to cache and memory" << std::endl;
+            cout << "WRITE HIT (Write-Through): Address 0x" << hex << address
+                      << " (Tag: 0x" << tag << ", Set: " << dec << set_index
+                      << ", Way: " << hit_line << ") - Writing to cache and memory" << endl;
         } else {
 
             set.lines[hit_line].dirty = true;
-            std::cout << "WRITE HIT (Write-Back): Address 0x" << std::hex << address
-                      << " (Tag: 0x" << tag << ", Set: " << std::dec << set_index
-                      << ", Way: " << hit_line << ") - Writing to cache, marking dirty" << std::endl;
+            cout << "WRITE HIT (Write-Back): Address 0x" << hex << address
+                      << " (Tag: 0x" << tag << ", Set: " << dec << set_index
+                      << ", Way: " << hit_line << ") - Writing to cache, marking dirty" << endl;
         }
 
 
@@ -198,15 +199,15 @@ bool SetAssociativeCache::writeMemory(unsigned int address, int data) {
 
         if (config.write_miss_policy == NO_WRITE_ALLOCATE) {
 
-            std::cout << "WRITE MISS (No-Write-Allocate): Address 0x" << std::hex << address
-                      << " (Tag: 0x" << tag << ", Set: " << std::dec << set_index
-                      << ") - Writing directly to memory" << std::endl;
+            cout << "WRITE MISS (No-Write-Allocate): Address 0x" << hex << address
+                      << " (Tag: 0x" << tag << ", Set: " << dec << set_index
+                      << ") - Writing directly to memory" << endl;
             return false;
         } else {
 
-            std::cout << "WRITE MISS (Write-Allocate): Address 0x" << std::hex << address
-                      << " (Tag: 0x" << tag << ", Set: " << std::dec << set_index
-                      << ") - Loading block into cache" << std::endl;
+            cout << "WRITE MISS (Write-Allocate): Address 0x" << hex << address
+                      << " (Tag: 0x" << tag << ", Set: " << dec << set_index
+                      << ") - Loading block into cache" << endl;
 
 
             int empty_line = set.findEmptyLine();
@@ -235,10 +236,10 @@ bool SetAssociativeCache::writeMemory(unsigned int address, int data) {
 
 
                 if (config.write_policy == WRITE_THROUGH) {
-                    std::cout << "Write-Through: Also writing to memory" << std::endl;
+                    cout << "Write-Through: Also writing to memory" << endl;
                 } else {
                     set.lines[empty_line].dirty = true;
-                    std::cout << "Write-Back: Marking cache line dirty" << std::endl;
+                    cout << "Write-Back: Marking cache line dirty" << endl;
                 }
 
             } else {
@@ -257,7 +258,7 @@ bool SetAssociativeCache::writeMemory(unsigned int address, int data) {
                     writebacks++;
                     dirty_evictions++;
                     last_access.was_dirty_eviction = true;
-                    std::cout << "WRITEBACK: Evicted dirty line written to memory" << std::endl;
+                    cout << "WRITEBACK: Evicted dirty line written to memory" << endl;
                 }
 
 
@@ -278,10 +279,10 @@ bool SetAssociativeCache::writeMemory(unsigned int address, int data) {
 
 
                 if (config.write_policy == WRITE_THROUGH) {
-                    std::cout << "Write-Through: Also writing to memory" << std::endl;
+                    cout << "Write-Through: Also writing to memory" << endl;
                 } else {
                     set.lines[evict_line].dirty = true;
-                    std::cout << "Write-Back: Marking cache line dirty" << std::endl;
+                    cout << "Write-Back: Marking cache line dirty" << endl;
                 }
             }
 
@@ -312,7 +313,7 @@ void SetAssociativeCache::reset() {
             line.dirty = false;
             line.lru_counter = 0;
             line.fifo_timestamp = 0;
-            std::fill(line.data.begin(), line.data.end(), 0);
+            fill(line.data.begin(), line.data.end(), 0);
         }
     }
 
@@ -328,64 +329,64 @@ void SetAssociativeCache::reset() {
 
     last_access = LastAccess();
 
-    std::cout << "Cache reset successfully." << std::endl;
+    cout << "Cache reset successfully." << endl;
 }
 
 void SetAssociativeCache::displayCache() const {
-    std::cout << "\n=== CACHE STATE ===" << std::endl;
-    std::cout << "Cache Size: " << config.cache_size << " bytes" << std::endl;
-    std::cout << "Block Size: " << config.block_size << " bytes" << std::endl;
-    std::cout << "Associativity: " << config.associativity << "-way" << std::endl;
-    std::cout << "Number of Sets: " << config.num_sets << std::endl;
-    std::cout << "Address bits: " << config.address_bits
+    cout << "\n=== CACHE STATE ===" << endl;
+    cout << "Cache Size: " << config.cache_size << " bytes" << endl;
+    cout << "Block Size: " << config.block_size << " bytes" << endl;
+    cout << "Associativity: " << config.associativity << "-way" << endl;
+    cout << "Number of Sets: " << config.num_sets << endl;
+    cout << "Address bits: " << config.address_bits
               << " (Tag: " << config.tag_bits
               << ", Index: " << config.index_bits
-              << ", Offset: " << config.offset_bits << ")" << std::endl;
+              << ", Offset: " << config.offset_bits << ")" << endl;
 
-    std::cout << "\nStatistics:" << std::endl;
-    std::cout << "Total Accesses: " << total_accesses << std::endl;
-    std::cout << "Cache Hits: " << cache_hits << std::endl;
-    std::cout << "Cache Misses: " << cache_misses << std::endl;
-    std::cout << "  - Compulsory Misses: " << compulsory_misses << std::endl;
-    std::cout << "  - Conflict Misses: " << conflict_misses << std::endl;
-    std::cout << "Hit Rate: " << std::fixed << std::setprecision(2)
-              << (getHitRate() * 100) << "%" << std::endl;
-    std::cout << "Writebacks: " << writebacks << std::endl;
-    std::cout << "Dirty Evictions: " << dirty_evictions << std::endl;
+    cout << "\nStatistics:" << endl;
+    cout << "Total Accesses: " << total_accesses << endl;
+    cout << "Cache Hits: " << cache_hits << endl;
+    cout << "Cache Misses: " << cache_misses << endl;
+    cout << "  - Compulsory Misses: " << compulsory_misses << endl;
+    cout << "  - Conflict Misses: " << conflict_misses << endl;
+    cout << "Hit Rate: " << fixed << setprecision(2)
+              << (getHitRate() * 100) << "%" << endl;
+    cout << "Writebacks: " << writebacks << endl;
+    cout << "Dirty Evictions: " << dirty_evictions << endl;
 
     displayCacheDetailed();
 }
 
 void SetAssociativeCache::displayCacheDetailed() const {
-    std::cout << "\nCache Contents:" << std::endl;
+    cout << "\nCache Contents:" << endl;
 
     for (int set_idx = 0; set_idx < config.num_sets; set_idx++) {
-        std::cout << "Set " << set_idx << ":" << std::endl;
-        std::cout << "  Way | Valid | Dirty | Tag      | LRU | Data (first 4 words)" << std::endl;
-        std::cout << "  ----|-------|-------|----------|-----|-------------------" << std::endl;
+        cout << "Set " << set_idx << ":" << endl;
+        cout << "  Way | Valid | Dirty | Tag      | LRU | Data (first 4 words)" << endl;
+        cout << "  ----|-------|-------|----------|-----|-------------------" << endl;
 
         const CacheSet& set = cache_sets[set_idx];
         for (int way = 0; way < config.associativity; way++) {
             const AssociativeCacheLine& line = set.lines[way];
 
-            std::cout << "  " << std::setw(3) << way << " | ";
-            std::cout << std::setw(5) << (line.valid ? "1" : "0") << " | ";
-            std::cout << std::setw(5) << (line.dirty ? "1" : "0") << " | ";
+            cout << "  " << setw(3) << way << " | ";
+            cout << setw(5) << (line.valid ? "1" : "0") << " | ";
+            cout << setw(5) << (line.dirty ? "1" : "0") << " | ";
 
             if (line.valid) {
-                std::cout << "0x" << std::hex << std::setw(6) << std::setfill('0')
-                          << line.tag << std::dec << " | ";
-                std::cout << std::setw(3) << line.lru_counter << " | ";
-                for (int j = 0; j < std::min(4, (int)line.data.size()); j++) {
-                    std::cout << std::setw(4) << line.data[j] << " ";
+                cout << "0x" << hex << setw(6) << setfill('0')
+                          << line.tag << dec << " | ";
+                cout << setw(3) << line.lru_counter << " | ";
+                for (int j = 0; j < min(4, (int)line.data.size()); j++) {
+                    cout << setw(4) << line.data[j] << " ";
                 }
             } else {
-                std::cout << "  ----   |  -- |  -- | ---- ---- ---- ----";
+                cout << "  ----   |  -- |  -- | ---- ---- ---- ----";
             }
-            std::cout << std::endl;
-            std::cout << std::setfill(' ');
+            cout << endl;
+            cout << setfill(' ');
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 }
 
@@ -434,25 +435,25 @@ void SetAssociativeCache::initializeBlockCounters(CacheSet& set, int line_index)
 }
 
 
-std::vector<TraceEntry> SetAssociativeCache::loadTraceFile(const std::string& filename) {
-    std::vector<TraceEntry> trace;
-    std::ifstream file(filename);
+vector<TraceEntry> SetAssociativeCache::loadTraceFile(const string& filename) {
+    vector<TraceEntry> trace;
+    ifstream file(filename);
 
     if (!file.is_open()) {
-        std::cerr << "Error: Could not open trace file: " << filename << std::endl;
+        cerr << "Error: Could not open trace file: " << filename << endl;
         return trace;
     }
 
-    std::string line;
-    while (std::getline(file, line)) {
+    string line;
+    while (getline(file, line)) {
 
         if (line.empty() || line[0] == '#') {
             continue;
         }
 
-        std::istringstream iss(line);
-        std::string operation;
-        std::string address_str;
+        istringstream iss(line);
+        string operation;
+        string address_str;
 
         if (!(iss >> operation >> address_str)) {
             continue;
@@ -462,12 +463,12 @@ std::vector<TraceEntry> SetAssociativeCache::loadTraceFile(const std::string& fi
         unsigned int address;
         try {
             if (address_str.substr(0, 2) == "0x" || address_str.substr(0, 2) == "0X") {
-                address = std::stoul(address_str, nullptr, 16);
+                address = stoul(address_str, nullptr, 16);
             } else {
-                address = std::stoul(address_str, nullptr, 10);
+                address = stoul(address_str, nullptr, 10);
             }
-        } catch (const std::exception& e) {
-            std::cerr << "Warning: Could not parse address: " << address_str << std::endl;
+        } catch (const exception& e) {
+            cerr << "Warning: Could not parse address: " << address_str << endl;
             continue;
         }
 
@@ -477,11 +478,11 @@ std::vector<TraceEntry> SetAssociativeCache::loadTraceFile(const std::string& fi
 
         int data = 0;
         if (type == WRITE) {
-            std::string data_str;
+            string data_str;
             if (iss >> data_str) {
                 try {
-                    data = std::stoi(data_str);
-                } catch (const std::exception& e) {
+                    data = stoi(data_str);
+                } catch (const exception& e) {
                     data = 0;
                 }
             }
@@ -491,18 +492,18 @@ std::vector<TraceEntry> SetAssociativeCache::loadTraceFile(const std::string& fi
     }
 
     file.close();
-    std::cout << "Loaded " << trace.size() << " trace entries from " << filename << std::endl;
+    cout << "Loaded " << trace.size() << " trace entries from " << filename << endl;
     return trace;
 }
 
 
-TraceResults SetAssociativeCache::processTraceFile(const std::string& filename) {
-    std::vector<TraceEntry> trace = loadTraceFile(filename);
+TraceResults SetAssociativeCache::processTraceFile(const string& filename) {
+    vector<TraceEntry> trace = loadTraceFile(filename);
     return processTrace(trace);
 }
 
 
-TraceResults SetAssociativeCache::processTrace(const std::vector<TraceEntry>& trace) {
+TraceResults SetAssociativeCache::processTrace(const vector<TraceEntry>& trace) {
 
     reset();
 

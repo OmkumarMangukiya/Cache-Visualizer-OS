@@ -1,6 +1,6 @@
 #ifndef HIERARCHICAL_CACHE_H
 #define HIERARCHICAL_CACHE_H
-
+using namespace std;
 #include "Cache.h"
 #include <string>
 #include <vector>
@@ -18,22 +18,22 @@ enum CacheLevel {
 struct LevelAccessResult {
     CacheLevel level;
     bool hit;
-    std::string status;
+    string status;
     int access_time;
     unsigned int evicted_tag;
     bool had_eviction;
 
-    LevelAccessResult(CacheLevel lvl = L1, bool h = false, std::string s = "MISS", int time = 1)
+    LevelAccessResult(CacheLevel lvl = L1, bool h = false, string s = "MISS", int time = 1)
         : level(lvl), hit(h), status(s), access_time(time), evicted_tag(0), had_eviction(false) {}
 };
 
 
 struct HierarchyAccessResult {
-    std::vector<LevelAccessResult> level_results;
+    vector<LevelAccessResult> level_results;
     CacheLevel final_level;
     int total_access_time;
     bool overall_hit;
-    std::string access_path;
+    string access_path;
 
     HierarchyAccessResult() : final_level(MAIN_MEMORY), total_access_time(0), overall_hit(false) {}
 };
@@ -44,11 +44,11 @@ struct LevelConfig {
     int block_size;
     int associativity;
     int access_time;
-    std::string name;
+    string name;
     WritePolicy write_policy;
     WriteMissPolicy write_miss_policy;
 
-    LevelConfig(int size = 1024, int block = 64, int assoc = 1, int time = 1, std::string n = "L1",
+    LevelConfig(int size = 1024, int block = 64, int assoc = 1, int time = 1, string n = "L1",
                WritePolicy wp = WRITE_BACK, WriteMissPolicy wmp = WRITE_ALLOCATE)
         : cache_size(size), block_size(block), associativity(assoc), access_time(time), name(n),
           write_policy(wp), write_miss_policy(wmp) {}
@@ -57,9 +57,9 @@ struct LevelConfig {
 
 class HierarchicalCache {
 private:
-    std::unique_ptr<SetAssociativeCache> l1_cache;
-    std::unique_ptr<SetAssociativeCache> l2_cache;
-    std::unique_ptr<SetAssociativeCache> l3_cache;
+    unique_ptr<SetAssociativeCache> l1_cache;
+    unique_ptr<SetAssociativeCache> l2_cache;
+    unique_ptr<SetAssociativeCache> l3_cache;
 
     LevelConfig l1_config;
     LevelConfig l2_config;
@@ -104,12 +104,12 @@ public:
 
     void resetStatistics();
     void printStatistics() const;
-    std::string getStatisticsJSON() const;
+    string getStatisticsJSON() const;
 
 
-    std::string getL1StateJSON() const;
-    std::string getL2StateJSON() const;
-    std::string getL3StateJSON() const;
+    string getL1StateJSON() const;
+    string getL2StateJSON() const;
+    string getL3StateJSON() const;
 
 
     LevelConfig getL1Config() const { return l1_config; }
@@ -132,7 +132,7 @@ public:
     double getOverallHitRate() const;
 
 
-    std::string getLastAccessDetails() const;
+    string getLastAccessDetails() const;
     void printCacheStates() const;
 };
 

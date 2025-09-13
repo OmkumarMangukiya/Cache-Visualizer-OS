@@ -1,6 +1,6 @@
 #ifndef SET_ASSOCIATIVE_CACHE_H
 #define SET_ASSOCIATIVE_CACHE_H
-
+using namespace std;
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -38,9 +38,9 @@ struct TraceResults {
     int dirty_evictions;
     double hit_rate;
     double miss_rate;
-    std::string replacement_policy;
-    std::string write_policy;
-    std::string write_miss_policy;
+    string replacement_policy;
+    string write_policy;
+    string write_miss_policy;
 
     TraceResults() : total_accesses(0), reads(0), writes(0), hits(0), misses(0),
                     writebacks(0), dirty_evictions(0), hit_rate(0.0), miss_rate(0.0) {}
@@ -87,7 +87,7 @@ struct AssociativeCacheLine {
     unsigned int tag;
     unsigned int lru_counter;
     unsigned int fifo_timestamp;
-    std::vector<int> data;
+    vector<int> data;
 
     AssociativeCacheLine() : valid(false), dirty(false), tag(0), lru_counter(0), fifo_timestamp(0) {}
 
@@ -110,7 +110,7 @@ struct AssociativeCacheLine {
 
 
 struct CacheSet {
-    std::vector<AssociativeCacheLine> lines;
+    vector<AssociativeCacheLine> lines;
 
     CacheSet(int associativity, int block_size) {
         lines.resize(associativity);
@@ -169,9 +169,9 @@ struct CacheSet {
 
 
     int findRandomLine() {
-        static std::random_device rd;
-        static std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(0, lines.size() - 1);
+        static random_device rd;
+        static mt19937 gen(rd());
+        uniform_int_distribution<> dis(0, lines.size() - 1);
         return dis(gen);
     }
 };
@@ -179,7 +179,7 @@ struct CacheSet {
 
 class SetAssociativeCache {
 private:
-    std::vector<CacheSet> cache_sets;
+    vector<CacheSet> cache_sets;
     AssociativeCacheConfig config;
     unsigned int global_lru_counter;
     unsigned int global_fifo_timestamp;
@@ -234,7 +234,7 @@ public:
     unsigned int getOffset(unsigned int address);
 
 
-    const std::vector<CacheSet>& getCacheSets() const { return cache_sets; }
+    const vector<CacheSet>& getCacheSets() const { return cache_sets; }
     const AssociativeCacheConfig& getConfig() const { return config; }
     const LastAccess& getLastAccess() const { return last_access; }
 
@@ -251,7 +251,7 @@ public:
     }
 
 
-    std::string getReplacementPolicyString() const {
+    string getReplacementPolicyString() const {
         switch(config.replacement_policy) {
             case LRU: return "LRU";
             case FIFO: return "FIFO";
@@ -259,17 +259,17 @@ public:
             default: return "Unknown";
         }
     }
-    std::string getWritePolicyString() const {
+    string getWritePolicyString() const {
         return (config.write_policy == WRITE_THROUGH) ? "Write-Through" : "Write-Back";
     }
-    std::string getWriteMissPolicyString() const {
+    string getWriteMissPolicyString() const {
         return (config.write_miss_policy == WRITE_ALLOCATE) ? "Write-Allocate" : "No-Write-Allocate";
     }
 
 
-    std::vector<TraceEntry> loadTraceFile(const std::string& filename);
-    TraceResults processTraceFile(const std::string& filename);
-    TraceResults processTrace(const std::vector<TraceEntry>& trace);
+    vector<TraceEntry> loadTraceFile(const string& filename);
+    TraceResults processTraceFile(const string& filename);
+    TraceResults processTrace(const vector<TraceEntry>& trace);
 
 
     void reset();

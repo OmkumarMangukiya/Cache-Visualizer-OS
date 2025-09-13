@@ -1,6 +1,6 @@
 #ifndef LRUPOLICY_H
 #define LRUPOLICY_H
-
+using namespace std;
 #include "IReplacementPolicy.h"
 #include <vector>
 #include <map>
@@ -9,7 +9,7 @@
 
 class LruPolicy : public IReplacementPolicy {
 private:
-    std::map<int, std::vector<int>> lru_counters;
+    map<int, vector<int>> lru_counters;
     int global_counter;
 
 public:
