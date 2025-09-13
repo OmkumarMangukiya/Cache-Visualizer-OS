@@ -4,7 +4,6 @@
 CMakeFiles/cache_logic.dir/cpp_logic/src/Bridge.cpp.o
  /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/src/Bridge.cpp
  /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/include/simulator/Cache.h
- /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/include/simulator/CacheHierarchy.h
  /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/include/simulator/policies/IReplacementPolicy.h
  /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/include/simulator/policies/LruPolicy.h
  /usr/include/alloca.h

@@ -254,9 +254,12 @@ Colors:
                         self.canvas.create_text(x_base + cell_width // 2, y_base + 30, 
                                                text=f"Time: {block['access_time']}", font=('Arial', 8))
                     if block['data'] is not None:
-                        data_text = f"Data: {block['data']}"
+                        if isinstance(block['data'], list):
+                            data_text = f"[{','.join(map(str, block['data'][:2]))}]"
+                        else:
+                            data_text = f"{block['data']}"
                         self.canvas.create_text(x_base + cell_width // 2, y_base + 45, 
-                                               text=data_text, font=('Arial', 8), fill='blue')
+                                               text=data_text, font=('Arial', 7), fill='blue')
                 else:
                     self.canvas.create_text(x_base + cell_width // 2, y_base + cell_height // 2, 
                                            text="EMPTY", font=('Arial', 10), fill='gray')

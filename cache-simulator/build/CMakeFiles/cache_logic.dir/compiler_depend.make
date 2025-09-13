@@ -3,7 +3,6 @@
 
 CMakeFiles/cache_logic.dir/cpp_logic/src/Bridge.cpp.o: /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/src/Bridge.cpp \
   /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/include/simulator/Cache.h \
-  /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/include/simulator/CacheHierarchy.h \
   /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/include/simulator/policies/IReplacementPolicy.h \
   /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/include/simulator/policies/LruPolicy.h \
   /usr/include/alloca.h \
@@ -907,8 +906,6 @@ CMakeFiles/cache_logic.dir/cpp_logic/src/policies/LruPolicy.cpp.o: /home/omman/D
 
 /usr/include/c++/13/bits/move.h:
 
-/home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/include/simulator/CacheHierarchy.h:
-
 /usr/include/c++/13/bits/streambuf.tcc:
 
 /usr/include/c++/13/bits/specfun.h:
@@ -928,6 +925,28 @@ CMakeFiles/cache_logic.dir/cpp_logic/src/policies/LruPolicy.cpp.o: /home/omman/D
 /usr/include/x86_64-linux-gnu/bits/stdlib.h:
 
 /usr/include/c++/13/bits/locale_facets.h:
+
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
+
+/usr/include/c++/13/bits/exception_defines.h:
+
+/usr/include/c++/13/bits/localefwd.h:
+
+/usr/include/c++/13/bits/streambuf_iterator.h:
+
+/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
+
+/usr/include/c++/13/bits/stl_vector.h:
+
+/usr/include/c++/13/bits/stl_tempbuf.h:
+
+/usr/include/c++/13/bits/random.h:
+
+/usr/include/c++/13/bits/stl_tree.h:
+
+/usr/include/c++/13/bits/codecvt.h:
+
+/usr/include/c++/13/backward/binders.h:
 
 /usr/include/c++/13/ext/aligned_buffer.h:
 
@@ -963,22 +982,6 @@ CMakeFiles/cache_logic.dir/cpp_logic/src/policies/LruPolicy.cpp.o: /home/omman/D
 
 /home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/src/Bridge.cpp:
 
-/usr/include/c++/13/bits/stl_vector.h:
-
-/usr/include/c++/13/bits/stl_tempbuf.h:
-
-/usr/include/c++/13/bits/random.h:
-
-/usr/include/c++/13/bits/stl_tree.h:
-
-/usr/include/c++/13/bits/codecvt.h:
-
-/usr/include/c++/13/backward/binders.h:
-
-/usr/include/c++/13/bits/predefined_ops.h:
-
-/usr/include/c++/13/iosfwd:
-
 /usr/include/c++/13/bits/cxxabi_forced.h:
 
 /usr/include/c++/13/climits:
@@ -996,6 +999,10 @@ CMakeFiles/cache_logic.dir/cpp_logic/src/policies/LruPolicy.cpp.o: /home/omman/D
 /usr/include/x86_64-linux-gnu/sys/select.h:
 
 /usr/include/c++/13/cwchar:
+
+/usr/include/c++/13/iosfwd:
+
+/usr/include/c++/13/bits/predefined_ops.h:
 
 /usr/include/alloca.h:
 
@@ -1034,16 +1041,6 @@ CMakeFiles/cache_logic.dir/cpp_logic/src/policies/LruPolicy.cpp.o: /home/omman/D
 /usr/include/c++/13/bits/basic_ios.h:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
-
-/usr/include/c++/13/bits/localefwd.h:
-
-/usr/include/c++/13/bits/streambuf_iterator.h:
-
-/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
-
-/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
-
-/usr/include/c++/13/bits/exception_defines.h:
 
 /usr/include/c++/13/bits/cxxabi_init_exception.h:
 

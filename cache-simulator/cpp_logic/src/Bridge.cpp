@@ -27,7 +27,7 @@ struct CacheSimulator {
 };
 
 
-static char result_buffer[8192];  // Increased buffer size for cache state
+static char result_buffer[8192]; 
 
 extern "C" {
     __attribute__((visibility("default"))) CacheSimulator* create_simulator() {
@@ -254,7 +254,12 @@ extern "C" {
                          << "\"data\": ";
                     
                     if (line.valid && line.data.size() > 0) {
-                        json << "\"Data_" << hex << line.tag << dec << "\"";
+                        json << "[";
+                        for (size_t i = 0; i < min(line.data.size(), (size_t)2); i++) {
+                            if (i > 0) json << ",";
+                            json << line.data[i];
+                        }
+                        json << "]";
                     } else {
                         json << "null";
                     }
