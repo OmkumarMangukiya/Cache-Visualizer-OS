@@ -15,15 +15,15 @@ HierarchicalCache::HierarchicalCache(const LevelConfig &l1_cfg, const LevelConfi
     l2_cache.reset(new SetAssociativeCache(l2_cfg.cache_size, l2_cfg.block_size, l2_cfg.associativity));
     l3_cache.reset(new SetAssociativeCache(l3_cfg.cache_size, l3_cfg.block_size, l3_cfg.associativity));
 
-    std::cout << "Hierarchical Cache System Initialized:" << std::endl;
-    std::cout << "L1: " << l1_cfg.cache_size << "B, " << l1_cfg.associativity << "-way, " << l1_cfg.access_time << " cycles, "
-              << (l1_cfg.write_policy == WRITE_THROUGH ? "Write-Through" : "Write-Back") << std::endl;
-    std::cout << "L2: " << l2_cfg.cache_size << "B, " << l2_cfg.associativity << "-way, " << l2_cfg.access_time << " cycles, "
-              << (l2_cfg.write_policy == WRITE_THROUGH ? "Write-Through" : "Write-Back") << std::endl;
-    std::cout << "L3: " << l3_cfg.cache_size << "B, " << l3_cfg.associativity << "-way, " << l3_cfg.access_time << " cycles, "
-              << (l3_cfg.write_policy == WRITE_THROUGH ? "Write-Through" : "Write-Back") << std::endl;
-    std::cout << "Main Memory: " << memory_time << " cycles" << std::endl;
-    std::cout << "Inclusion Policy: " << (inclusive ? "Inclusive" : "Exclusive") << std::endl << std::endl;
+    cout << "Hierarchical Cache System Initialized:" << endl;
+    cout << "L1: " << l1_cfg.cache_size << "B, " << l1_cfg.associativity << "-way, " << l1_cfg.access_time << " cycles, "
+              << (l1_cfg.write_policy == WRITE_THROUGH ? "Write-Through" : "Write-Back") << endl;
+    cout << "L2: " << l2_cfg.cache_size << "B, " << l2_cfg.associativity << "-way, " << l2_cfg.access_time << " cycles, "
+              << (l2_cfg.write_policy == WRITE_THROUGH ? "Write-Through" : "Write-Back") << endl;
+    cout << "L3: " << l3_cfg.cache_size << "B, " << l3_cfg.associativity << "-way, " << l3_cfg.access_time << " cycles, "
+              << (l3_cfg.write_policy == WRITE_THROUGH ? "Write-Through" : "Write-Back") << endl;
+    cout << "Main Memory: " << memory_time << " cycles" << endl;
+    cout << "Inclusion Policy: " << (inclusive ? "Inclusive" : "Exclusive") << endl << endl;
 }
 
 HierarchicalCache::~HierarchicalCache() = default;
@@ -32,7 +32,7 @@ HierarchyAccessResult HierarchicalCache::accessMemory(unsigned int address) {
     HierarchyAccessResult result;
     total_requests++;
 
-    std::ostringstream path;
+    ostringstream path;
     int accumulated_time = 0;
 
 
@@ -213,62 +213,62 @@ void HierarchicalCache::resetStatistics() {
 }
 
 void HierarchicalCache::printStatistics() const {
-    std::cout << "\n=== HIERARCHICAL CACHE STATISTICS ===" << std::endl;
-    std::cout << "Total Requests: " << total_requests << std::endl;
-    std::cout << "Average Access Time: " << std::fixed << std::setprecision(2)
-              << getAverageAccessTime() << " cycles" << std::endl << std::endl;
+    cout << "\n=== HIERARCHICAL CACHE STATISTICS ===" << endl;
+    cout << "Total Requests: " << total_requests << endl;
+    cout << "Average Access Time: " << fixed << setprecision(2)
+              << getAverageAccessTime() << " cycles" << endl << endl;
 
-    std::cout << "L1 Cache:" << std::endl;
-    std::cout << "  Hits: " << l1_hits << " (" << std::fixed << std::setprecision(1)
-              << getL1HitRate() << "%)" << std::endl;
-    std::cout << "  Access Time: " << l1_config.access_time << " cycles" << std::endl << std::endl;
+    cout << "L1 Cache:" << endl;
+    cout << "  Hits: " << l1_hits << " (" << fixed << setprecision(1)
+              << getL1HitRate() << "%)" << endl;
+    cout << "  Access Time: " << l1_config.access_time << " cycles" << endl << endl;
 
-    std::cout << "L2 Cache:" << std::endl;
-    std::cout << "  Hits: " << l2_hits << " (" << std::fixed << std::setprecision(1)
-              << getL2HitRate() << "%)" << std::endl;
-    std::cout << "  Access Time: " << l2_config.access_time << " cycles" << std::endl << std::endl;
+    cout << "L2 Cache:" << endl;
+    cout << "  Hits: " << l2_hits << " (" << fixed << setprecision(1)
+              << getL2HitRate() << "%)" << endl;
+    cout << "  Access Time: " << l2_config.access_time << " cycles" << endl << endl;
 
-    std::cout << "L3 Cache:" << std::endl;
-    std::cout << "  Hits: " << l3_hits << " (" << std::fixed << std::setprecision(1)
-              << getL3HitRate() << "%)" << std::endl;
-    std::cout << "  Access Time: " << l3_config.access_time << " cycles" << std::endl << std::endl;
+    cout << "L3 Cache:" << endl;
+    cout << "  Hits: " << l3_hits << " (" << fixed << setprecision(1)
+              << getL3HitRate() << "%)" << endl;
+    cout << "  Access Time: " << l3_config.access_time << " cycles" << endl << endl;
 
-    std::cout << "Main Memory:" << std::endl;
-    std::cout << "  Accesses: " << main_memory_accesses << std::endl;
-    std::cout << "  Access Time: " << main_memory_access_time << " cycles" << std::endl << std::endl;
+    cout << "Main Memory:" << endl;
+    cout << "  Accesses: " << main_memory_accesses << endl;
+    cout << "  Access Time: " << main_memory_access_time << " cycles" << endl << endl;
 
-    std::cout << "Overall Hit Rate: " << std::fixed << std::setprecision(1)
-              << getOverallHitRate() << "%" << std::endl;
+    cout << "Overall Hit Rate: " << fixed << setprecision(1)
+              << getOverallHitRate() << "%" << endl;
 }
 
-std::string HierarchicalCache::getStatisticsJSON() const {
-    std::ostringstream json;
+string HierarchicalCache::getStatisticsJSON() const {
+    ostringstream json;
     json << "{";
     json << "\"total_requests\":" << total_requests << ",";
     json << "\"l1_hits\":" << l1_hits << ",";
     json << "\"l2_hits\":" << l2_hits << ",";
     json << "\"l3_hits\":" << l3_hits << ",";
     json << "\"main_memory_accesses\":" << main_memory_accesses << ",";
-    json << "\"l1_hit_rate\":" << std::fixed << std::setprecision(2) << getL1HitRate() << ",";
-    json << "\"l2_hit_rate\":" << std::fixed << std::setprecision(2) << getL2HitRate() << ",";
-    json << "\"l3_hit_rate\":" << std::fixed << std::setprecision(2) << getL3HitRate() << ",";
-    json << "\"overall_hit_rate\":" << std::fixed << std::setprecision(2) << getOverallHitRate() << ",";
-    json << "\"average_access_time\":" << std::fixed << std::setprecision(2) << getAverageAccessTime();
+    json << "\"l1_hit_rate\":" << fixed << setprecision(2) << getL1HitRate() << ",";
+    json << "\"l2_hit_rate\":" << fixed << setprecision(2) << getL2HitRate() << ",";
+    json << "\"l3_hit_rate\":" << fixed << setprecision(2) << getL3HitRate() << ",";
+    json << "\"overall_hit_rate\":" << fixed << setprecision(2) << getOverallHitRate() << ",";
+    json << "\"average_access_time\":" << fixed << setprecision(2) << getAverageAccessTime();
     json << "}";
     return json.str();
 }
 
-std::string HierarchicalCache::getL1StateJSON() const {
+string HierarchicalCache::getL1StateJSON() const {
 
     return "{\"state\":\"available\",\"note\":\"L1 cache state\"}";
 }
 
-std::string HierarchicalCache::getL2StateJSON() const {
+string HierarchicalCache::getL2StateJSON() const {
 
     return "{\"state\":\"available\",\"note\":\"L2 cache state\"}";
 }
 
-std::string HierarchicalCache::getL3StateJSON() const {
+string HierarchicalCache::getL3StateJSON() const {
 
     return "{\"state\":\"available\",\"note\":\"L3 cache state\"}";
 }
@@ -301,20 +301,20 @@ double HierarchicalCache::getOverallHitRate() const {
     return (static_cast<double>(total_hits) / total_requests) * 100.0;
 }
 
-std::string HierarchicalCache::getLastAccessDetails() const {
+string HierarchicalCache::getLastAccessDetails() const {
 
 
     return "Last access details available in individual cache states";
 }
 
 void HierarchicalCache::printCacheStates() const {
-    std::cout << "\n=== L1 CACHE STATE ===" << std::endl;
+    cout << "\n=== L1 CACHE STATE ===" << endl;
     l1_cache->displayCache();
 
-    std::cout << "\n=== L2 CACHE STATE ===" << std::endl;
+    cout << "\n=== L2 CACHE STATE ===" << endl;
     l2_cache->displayCache();
 
-    std::cout << "\n=== L3 CACHE STATE ===" << std::endl;
+    cout << "\n=== L3 CACHE STATE ===" << endl;
     l3_cache->displayCache();
 }
 
@@ -322,8 +322,8 @@ HierarchyAccessResult HierarchicalCache::writeMemory(unsigned int address, int d
     HierarchyAccessResult result;
     total_requests++;
 
-    std::ostringstream path;
-    path << "WRITE 0x" << std::hex << address << std::dec << " (data=" << data << "): ";
+    ostringstream path;
+    path << "WRITE 0x" << hex << address << dec << " (data=" << data << "): ";
 
     int cumulative_time = 0;
 
@@ -414,7 +414,7 @@ HierarchyAccessResult HierarchicalCache::writeMemory(unsigned int address, int d
     result.access_path = path.str();
     total_access_time_accumulated += cumulative_time;
 
-    std::cout << result.access_path << " [" << cumulative_time << " cycles]" << std::endl;
+    cout << result.access_path << " [" << cumulative_time << " cycles]" << endl;
 
     return result;
 }

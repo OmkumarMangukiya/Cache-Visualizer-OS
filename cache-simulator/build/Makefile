@@ -174,19 +174,6 @@ cache_logic/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_logic.dir/build.make CMakeFiles/cache_logic.dir/build
 .PHONY : cache_logic/fast
 
-#=============================================================================
-# Target rules for targets named cache_test
-
-# Build rule for target.
-cache_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cache_test
-.PHONY : cache_test
-
-# fast build rule for target.
-cache_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_test.dir/build.make CMakeFiles/cache_test.dir/build
-.PHONY : cache_test/fast
-
 cpp_logic/src/Bridge.o: cpp_logic/src/Bridge.cpp.o
 .PHONY : cpp_logic/src/Bridge.o
 
@@ -259,33 +246,6 @@ cpp_logic/src/policies/LruPolicy.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_logic.dir/build.make CMakeFiles/cache_logic.dir/cpp_logic/src/policies/LruPolicy.cpp.s
 .PHONY : cpp_logic/src/policies/LruPolicy.cpp.s
 
-cpp_logic/src/test_main.o: cpp_logic/src/test_main.cpp.o
-.PHONY : cpp_logic/src/test_main.o
-
-# target to build an object file
-cpp_logic/src/test_main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_logic.dir/build.make CMakeFiles/cache_logic.dir/cpp_logic/src/test_main.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_test.dir/build.make CMakeFiles/cache_test.dir/cpp_logic/src/test_main.cpp.o
-.PHONY : cpp_logic/src/test_main.cpp.o
-
-cpp_logic/src/test_main.i: cpp_logic/src/test_main.cpp.i
-.PHONY : cpp_logic/src/test_main.i
-
-# target to preprocess a source file
-cpp_logic/src/test_main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_logic.dir/build.make CMakeFiles/cache_logic.dir/cpp_logic/src/test_main.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_test.dir/build.make CMakeFiles/cache_test.dir/cpp_logic/src/test_main.cpp.i
-.PHONY : cpp_logic/src/test_main.cpp.i
-
-cpp_logic/src/test_main.s: cpp_logic/src/test_main.cpp.s
-.PHONY : cpp_logic/src/test_main.s
-
-# target to generate assembly for a file
-cpp_logic/src/test_main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_logic.dir/build.make CMakeFiles/cache_logic.dir/cpp_logic/src/test_main.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_test.dir/build.make CMakeFiles/cache_test.dir/cpp_logic/src/test_main.cpp.s
-.PHONY : cpp_logic/src/test_main.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -299,7 +259,6 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... cache_logic"
-	@echo "... cache_test"
 	@echo "... cpp_logic/src/Bridge.o"
 	@echo "... cpp_logic/src/Bridge.i"
 	@echo "... cpp_logic/src/Bridge.s"
@@ -309,9 +268,6 @@ help:
 	@echo "... cpp_logic/src/policies/LruPolicy.o"
 	@echo "... cpp_logic/src/policies/LruPolicy.i"
 	@echo "... cpp_logic/src/policies/LruPolicy.s"
-	@echo "... cpp_logic/src/test_main.o"
-	@echo "... cpp_logic/src/test_main.i"
-	@echo "... cpp_logic/src/test_main.s"
 .PHONY : help
 
 

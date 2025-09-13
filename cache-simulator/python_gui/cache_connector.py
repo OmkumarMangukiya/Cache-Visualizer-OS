@@ -75,6 +75,8 @@ Or on Windows:
         self.lib.get_statistics.argtypes = [ctypes.c_void_p]
         self.lib.process_trace_file.restype = ctypes.c_char_p
         self.lib.process_trace_file.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+        self.lib.get_cache_state.restype = ctypes.c_char_p
+        self.lib.get_cache_state.argtypes = [ctypes.c_void_p]
         self.lib.reset_simulator.restype = None
         self.lib.reset_simulator.argtypes = [ctypes.c_void_p]
         self.lib.destroy_simulator.restype = None
@@ -128,6 +130,21 @@ Or on Windows:
                 return {"error": f"Invalid JSON response: {result_str}"}
         else:
             return {"error": "No response from library"}
+
+    def get_cache_state(self):
+        """Get current cache state"""
+        if not self.simulator:
+            raise RuntimeError("Simulator not configured")
+        result_bytes = self.lib.get_cache_state(self.simulator)
+        if result_bytes:
+            result_str = result_bytes.decode('utf-8')
+            try:
+                return json.loads(result_str)
+            except json.JSONDecodeError:
+                return {"error": f"Invalid JSON response: {result_str}"}
+        else:
+            return {"error": "No response from library"}
+
     def process_trace_file(self, filename):
         """Process an entire trace file"""
         if not self.simulator:

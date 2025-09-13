@@ -27,7 +27,7 @@ struct CacheSimulator {
 };
 
 
-static char result_buffer[1024];
+static char result_buffer[8192];  // Increased buffer size for cache state
 
 extern "C" {
     __attribute__((visibility("default"))) CacheSimulator* create_simulator() {
@@ -224,32 +224,48 @@ extern "C" {
 
         try {
             ostringstream json;
-            json << "{\"cache_state\": [";
+            json << "{\"sets\": {";
 
-            int num_sets = sim->cache_size / (sim->block_size * sim->associativity);
+            const auto& cache_sets = sim->cache->getCacheSets();
+            int num_sets = cache_sets.size();
 
             for (int set = 0; set < num_sets; set++) {
                 if (set > 0) json << ",";
-                json << "[";
+                json << "\"" << set << "\": {\"ways\": {";
 
+                const auto& cache_set = cache_sets[set];
                 for (int way = 0; way < sim->associativity; way++) {
                     if (way > 0) json << ",";
-
-
-
-                    json << "{"
-                         << "\"valid\": false,"
-                         << "\"tag\": null,"
-                         << "\"data\": null,"
-                         << "\"dirty\": false,"
-                         << "\"lru_counter\": 0"
-                         << "}";
+                    
+                    const auto& line = cache_set.lines[way];
+                    json << "\"" << way << "\": {"
+                         << "\"valid\": " << (line.valid ? "true" : "false") << ","
+                         << "\"tag\": ";
+                    
+                    if (line.valid) {
+                        json << "\"0x" << hex << line.tag << dec << "\"";
+                    } else {
+                        json << "null";
+                    }
+                    
+                    json << ","
+                         << "\"dirty\": " << (line.dirty ? "true" : "false") << ","
+                         << "\"lru_counter\": " << line.lru_counter << ","
+                         << "\"data\": ";
+                    
+                    if (line.valid && line.data.size() > 0) {
+                        json << "\"Data_" << hex << line.tag << dec << "\"";
+                    } else {
+                        json << "null";
+                    }
+                    
+                    json << "}";
                 }
 
-                json << "]";
+                json << "}}";
             }
 
-            json << "]}";
+            json << "}}";
 
             string result_str = json.str();
             strncpy(result_buffer, result_str.c_str(), sizeof(result_buffer) - 1);

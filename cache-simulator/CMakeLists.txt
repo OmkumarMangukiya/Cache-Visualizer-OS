@@ -12,7 +12,6 @@ file(GLOB_RECURSE SOURCES
     "cpp_logic/src/Bridge.cpp"
     "cpp_logic/src/Cache.cpp"
     "cpp_logic/src/policies/*.cpp"
-    "cpp_logic/src/test_main.cpp"
 )
 message(STATUS "Found source files:")
 foreach(source ${SOURCES})
@@ -47,7 +46,7 @@ target_compile_options(cache_logic PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4>
 )
 option(BUILD_TESTS "Build test executables" ON)
-if(BUILD_TESTS)
+if(BUILD_TESTS AND EXISTS "${CMAKE_SOURCE_DIR}/cpp_logic/src/test_main.cpp")
     add_executable(cache_test cpp_logic/src/test_main.cpp)
     target_link_libraries(cache_test cache_logic)
     set_target_properties(cache_test PROPERTIES

@@ -141,30 +141,36 @@ struct CacheSet {
 
 
     int findLRULine() {
-        int lru_index = 0;
-        unsigned int min_counter = lines[0].lru_counter;
+        int lru_index = -1;
+        unsigned int min_counter = UINT_MAX;
 
-        for (size_t i = 1; i < lines.size(); i++) {
-            if (lines[i].lru_counter < min_counter) {
+        // Only consider valid lines for LRU replacement
+        for (size_t i = 0; i < lines.size(); i++) {
+            if (lines[i].valid && lines[i].lru_counter < min_counter) {
                 min_counter = lines[i].lru_counter;
                 lru_index = i;
             }
         }
-        return lru_index;
+        
+        // If no valid lines found (shouldn't happen), return 0
+        return (lru_index != -1) ? lru_index : 0;
     }
 
 
     int findFIFOLine() {
-        int fifo_index = 0;
-        unsigned int min_timestamp = lines[0].fifo_timestamp;
+        int fifo_index = -1;
+        unsigned int min_timestamp = UINT_MAX;
 
-        for (size_t i = 1; i < lines.size(); i++) {
-            if (lines[i].fifo_timestamp < min_timestamp) {
+        // Only consider valid lines for FIFO replacement
+        for (size_t i = 0; i < lines.size(); i++) {
+            if (lines[i].valid && lines[i].fifo_timestamp < min_timestamp) {
                 min_timestamp = lines[i].fifo_timestamp;
                 fifo_index = i;
             }
         }
-        return fifo_index;
+        
+        // If no valid lines found (shouldn't happen), return 0
+        return (fifo_index != -1) ? fifo_index : 0;
     }
 
 

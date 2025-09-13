@@ -1,5 +1,4 @@
 /home/omman/Documents/Dev/osProject/cache-simulator/build/CMakeFiles/cache_logic.dir
-/home/omman/Documents/Dev/osProject/cache-simulator/build/CMakeFiles/cache_test.dir
 /home/omman/Documents/Dev/osProject/cache-simulator/build/CMakeFiles/edit_cache.dir
 /home/omman/Documents/Dev/osProject/cache-simulator/build/CMakeFiles/rebuild_cache.dir
 /home/omman/Documents/Dev/osProject/cache-simulator/build/CMakeFiles/list_install_components.dir

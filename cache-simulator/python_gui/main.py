@@ -242,7 +242,9 @@ Colors:
                     fill=color, outline=outline, width=2
                 )
                 if block['valid']:
-                    tag_text = f"Tag: {block['tag']:X}" if block['tag'] is not None else "Tag: --"
+                    # Convert tag from hex string to integer for formatting
+                    tag_value = int(block['tag'], 16) if isinstance(block['tag'], str) else block['tag']
+                    tag_text = f"Tag: {tag_value:X}" if block['tag'] is not None else "Tag: --"
                     self.canvas.create_text(x_base + cell_width // 2, y_base + 15, 
                                            text=tag_text, font=('Arial', 8))
                     if self.replacement_policy == "LRU":
@@ -272,6 +274,15 @@ Colors:
                     self.total_accesses = result.get('total_accesses', self.total_accesses)
                     self.hits = result.get('hits', self.hits)
                     self.misses = result.get('misses', self.misses)
+                    
+                    # Get the actual cache state from the backend
+                    try:
+                        cache_state = self.connector.get_cache_state()
+                        if "error" not in cache_state:
+                            self.cache_state = self.convert_backend_cache_state(cache_state)
+                    except Exception as e:
+                        print(f"Failed to get cache state: {e}")
+                    
                     result_info = {
                         'address': result.get('address', f"0x{address:X}"),
                         'operation': operation,
@@ -283,7 +294,11 @@ Colors:
                         'data': data,
                         'backend_used': True
                     }
-                    self.update_visualization_state(address, result_info)
+                    
+                    # Update current access highlighting
+                    self.current_set = result.get('set_index', 0)
+                    self.current_way = result.get('way', 0)
+                    
                     return result_info
                 else:
                     print(f"Backend error: {result.get('error', 'Unknown error')}")
@@ -291,6 +306,30 @@ Colors:
                 print(f"Backend access failed: {e}")
                 self.backend_ready = False
         return self.simulate_cache_access_fallback(address, operation, data)
+
+    def convert_backend_cache_state(self, backend_state):
+        """Convert backend cache state JSON to GUI format"""
+        gui_state = {}
+        
+        if "sets" in backend_state:
+            for set_idx, set_data in backend_state["sets"].items():
+                set_index = int(set_idx)
+                gui_state[set_index] = {}
+                
+                if "ways" in set_data:
+                    for way_idx, way_data in set_data["ways"].items():
+                        way_index = int(way_idx)
+                        gui_state[set_index][way_index] = {
+                            'valid': way_data.get('valid', False),
+                            'tag': way_data.get('tag', None),
+                            'data': way_data.get('data', None),
+                            'dirty': way_data.get('dirty', False),
+                            'lru_counter': way_data.get('lru_counter', 0),
+                            'access_time': way_data.get('access_time', 0),
+                            'recently_accessed': False  # Will be set by current access
+                        }
+        
+        return gui_state
     def simulate_cache_access_fallback(self, address, operation='R', data=None):
         """Fallback simulation when backend is unavailable"""
         self.total_accesses += 1
