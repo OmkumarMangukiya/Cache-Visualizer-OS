@@ -630,7 +630,16 @@ Colors:
     def display_access_result(self, result):
         """Display the result of a cache access"""
         access_text = f"{result['operation']} {result['address']}"
+        set_index = result.get('set_index', result.get('set'))
+        way = result.get('way')
+
+        if set_index is not None:
+            access_text += f" | Set: {set_index}"
+        if way is not None:
+            access_text += f" | Way: {way}"
+            
         self.current_access_label.config(text=access_text)
+
         if result['hit']:
             result_text = f"✅ HIT (Way {result['way']})"
             self.result_label.config(text=result_text, foreground='green')
