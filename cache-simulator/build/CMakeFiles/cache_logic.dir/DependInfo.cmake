@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/src/Bridge.cpp" "CMakeFiles/cache_logic.dir/cpp_logic/src/Bridge.cpp.o" "gcc" "CMakeFiles/cache_logic.dir/cpp_logic/src/Bridge.cpp.o.d"
   "/home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/src/Cache.cpp" "CMakeFiles/cache_logic.dir/cpp_logic/src/Cache.cpp.o" "gcc" "CMakeFiles/cache_logic.dir/cpp_logic/src/Cache.cpp.o.d"
+  "/home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/src/policies/FifoPolicy.cpp" "CMakeFiles/cache_logic.dir/cpp_logic/src/policies/FifoPolicy.cpp.o" "gcc" "CMakeFiles/cache_logic.dir/cpp_logic/src/policies/FifoPolicy.cpp.o.d"
   "/home/omman/Documents/Dev/osProject/cache-simulator/cpp_logic/src/policies/LruPolicy.cpp" "CMakeFiles/cache_logic.dir/cpp_logic/src/policies/LruPolicy.cpp.o" "gcc" "CMakeFiles/cache_logic.dir/cpp_logic/src/policies/LruPolicy.cpp.o.d"
   )
 

@@ -222,6 +222,30 @@ cpp_logic/src/Cache.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_logic.dir/build.make CMakeFiles/cache_logic.dir/cpp_logic/src/Cache.cpp.s
 .PHONY : cpp_logic/src/Cache.cpp.s
 
+cpp_logic/src/policies/FifoPolicy.o: cpp_logic/src/policies/FifoPolicy.cpp.o
+.PHONY : cpp_logic/src/policies/FifoPolicy.o
+
+# target to build an object file
+cpp_logic/src/policies/FifoPolicy.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_logic.dir/build.make CMakeFiles/cache_logic.dir/cpp_logic/src/policies/FifoPolicy.cpp.o
+.PHONY : cpp_logic/src/policies/FifoPolicy.cpp.o
+
+cpp_logic/src/policies/FifoPolicy.i: cpp_logic/src/policies/FifoPolicy.cpp.i
+.PHONY : cpp_logic/src/policies/FifoPolicy.i
+
+# target to preprocess a source file
+cpp_logic/src/policies/FifoPolicy.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_logic.dir/build.make CMakeFiles/cache_logic.dir/cpp_logic/src/policies/FifoPolicy.cpp.i
+.PHONY : cpp_logic/src/policies/FifoPolicy.cpp.i
+
+cpp_logic/src/policies/FifoPolicy.s: cpp_logic/src/policies/FifoPolicy.cpp.s
+.PHONY : cpp_logic/src/policies/FifoPolicy.s
+
+# target to generate assembly for a file
+cpp_logic/src/policies/FifoPolicy.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cache_logic.dir/build.make CMakeFiles/cache_logic.dir/cpp_logic/src/policies/FifoPolicy.cpp.s
+.PHONY : cpp_logic/src/policies/FifoPolicy.cpp.s
+
 cpp_logic/src/policies/LruPolicy.o: cpp_logic/src/policies/LruPolicy.cpp.o
 .PHONY : cpp_logic/src/policies/LruPolicy.o
 
@@ -265,6 +289,9 @@ help:
 	@echo "... cpp_logic/src/Cache.o"
 	@echo "... cpp_logic/src/Cache.i"
 	@echo "... cpp_logic/src/Cache.s"
+	@echo "... cpp_logic/src/policies/FifoPolicy.o"
+	@echo "... cpp_logic/src/policies/FifoPolicy.i"
+	@echo "... cpp_logic/src/policies/FifoPolicy.s"
 	@echo "... cpp_logic/src/policies/LruPolicy.o"
 	@echo "... cpp_logic/src/policies/LruPolicy.i"
 	@echo "... cpp_logic/src/policies/LruPolicy.s"

@@ -1,6 +1,6 @@
 #include "simulator/Cache.h"
-// #include "simulator/CacheHierarchy.h"
 #include "simulator/policies/LruPolicy.h"
+#include "simulator/policies/FifoPolicy.h"
 #include <string>
 #include <sstream>
 #include <cstring>
