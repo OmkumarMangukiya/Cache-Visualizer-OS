@@ -237,10 +237,11 @@ Colors:
                 else:
                     color = 'lightgreen'
                     outline = 'green'
-                self.canvas.create_rectangle(
+                rect_id = self.canvas.create_rectangle(
                     x_base, y_base, x_base + cell_width, y_base + cell_height,
                     fill=color, outline=outline, width=2
                 )
+                self.cache_state[set_idx][way]["rect_id"] = rect_id  # Store the rectangle ID
                 if block['valid']:
                     # Convert tag from hex string to integer for formatting
                     tag_value = int(block['tag'], 16) if isinstance(block['tag'], str) else block['tag']
@@ -268,46 +269,59 @@ Colors:
         """Simulate a cache access using backend or fallback simulation"""
         if self.backend_ready and self.connector:
             try:
+                # Process the access
                 result = self.connector.process_access(
                     address=address, 
                     operation=operation, 
                     data=data or 0
                 )
+                
                 if "error" not in result:
+                    # Update statistics
                     self.total_accesses = result.get('total_accesses', self.total_accesses)
                     self.hits = result.get('hits', self.hits)
                     self.misses = result.get('misses', self.misses)
                     
-                    # Get the actual cache state from the backend
-                    try:
-                        cache_state = self.connector.get_cache_state()
-                        if "error" not in cache_state:
-                            self.cache_state = self.convert_backend_cache_state(cache_state)
-                    except Exception as e:
-                        print(f"Failed to get cache state: {e}")
+                    # Get cache state
+                    cache_state = self.connector.get_cache_state()
+                    if "error" not in cache_state:
+                        self.cache_state = self.convert_backend_cache_state(cache_state)
                     
-                    result_info = {
+                    # Get set and way information
+                    set_index = result.get('set_index')
+                    tag = result.get('tag', '')
+                    if isinstance(tag, str) and tag.startswith('0x'):
+                        tag = tag[2:]
+                    
+                    # Find the way by looking at cache state
+                    found_way = None
+                    if cache_state and "sets" in cache_state:
+                        set_data = cache_state["sets"].get(str(set_index), {}).get("ways", {})
+                        for way_num, way_data in set_data.items():
+                            if (way_data.get("valid") and 
+                                str(way_data.get("tag", "")).replace("0x", "") == tag):
+                                found_way = int(way_num)
+                                break
+                    
+                    # Store current access info
+                    self.current_set = set_index
+                    self.current_way = found_way
+                    
+                    return {
                         'address': result.get('address', f"0x{address:X}"),
                         'operation': operation,
-                        'set': result.get('set_index', 0),
-                        'tag': result.get('tag', f"0x{address // self.block_size:X}"),
+                        'set_index': set_index,
+                        'way': found_way,
+                        'tag': tag,
                         'hit': result.get('result', 'MISS') == 'HIT',
                         'result': result.get('result', 'MISS'),
-                        'way': 0,
-                        'data': data,
-                        'backend_used': True
+                        'data': data
                     }
-                    
-                    # Update current access highlighting
-                    self.current_set = result.get('set_index', 0)
-                    self.current_way = result.get('way', 0)
-                    
-                    return result_info
-                else:
-                    print(f"Backend error: {result.get('error', 'Unknown error')}")
+                
             except Exception as e:
                 print(f"Backend access failed: {e}")
                 self.backend_ready = False
+    
         return self.simulate_cache_access_fallback(address, operation, data)
 
     def convert_backend_cache_state(self, backend_state):
@@ -397,47 +411,40 @@ Colors:
             result_info['evicted'] = True
         return result_info
     def update_visualization_state(self, address, result_info):
-        """Update visualization state based on access result"""
-        block_address = address // self.block_size
-        set_index = block_address % self.num_sets
-        tag = block_address // self.num_sets
-        for set_idx in range(self.num_sets):
-            for way in range(self.associativity):
-                self.cache_state[set_idx][way]['recently_accessed'] = False
-        self.current_set = set_index
-        self.current_way = result_info.get('way', 0)
-        if result_info['hit']:
-            if set_index in self.cache_state and result_info['way'] < len(self.cache_state[set_index]):
-                block = self.cache_state[set_index][result_info['way']]
-                block['recently_accessed'] = True
-                block['lru_counter'] = self.total_accesses
-                if result_info['operation'] == 'W' and 'data' in result_info:
-                    block['data'] = result_info['data']
-                    block['dirty'] = True
-        else:
-            if set_index not in self.cache_state:
-                self.cache_state[set_index] = {}
-            way = result_info.get('way', 0)
-            if way not in self.cache_state[set_index]:
-                self.cache_state[set_index][way] = {
-                    'valid': False,
-                    'tag': None,
-                    'data': None,
-                    'dirty': False,
-                    'lru_counter': 0,
-                    'access_time': 0,
-                    'recently_accessed': False
-                }
-            block = self.cache_state[set_index][way]
-            block['valid'] = True
-            block['tag'] = tag
-            block['recently_accessed'] = True
-            block['lru_counter'] = self.total_accesses
-            if result_info['operation'] == 'W' and 'data' in result_info:
-                block['data'] = result_info['data']
-                block['dirty'] = True
-            elif result_info['operation'] == 'R':
-                block['data'] = f"Data_{address:X}"
+        """Update the visualization state based on the backend result"""
+        # Get the information
+        set_index = result_info.get('set_index')
+        way = result_info.get('way')
+        address = result_info.get('address')
+        result = result_info.get('result')
+        
+        # Update the current access label
+        access_info = f"{address}"
+        if set_index is not None:
+            access_info += f" | Set: {set_index}"
+        if way is not None:
+            access_info += f" | Way: {way}"
+        self.current_access_label.config(text=access_info)
+        
+        # Update result label
+        self.result_label.config(
+            text=result,
+            fg="green" if result == "HIT" else "red"
+        )
+        
+        # Clear all highlights
+        for s in self.cache_state:
+            for w in self.cache_state[s]:
+                rect_id = self.cache_state[s][w]["rect_id"]
+                self.canvas.itemconfig(rect_id, fill="white")
+        
+        # Set new highlight
+        if set_index is not None and way is not None:
+            try:
+                rect_id = self.cache_state[set_index][way]["rect_id"]
+                self.canvas.itemconfig(rect_id, fill="blue")
+            except:
+                print(f"Could not highlight Set {set_index}, Way {way}")
     def find_replacement_way(self, set_index):
         """Find the way to replace using the current replacement policy"""
         if set_index not in self.cache_state:
