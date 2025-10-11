@@ -80,7 +80,7 @@ class CacheVisualizer:
         ttk.Label(config_frame, text="Replacement Policy:").grid(row=3, column=0, sticky=tk.W, pady=2)
         self.policy_var = tk.StringVar(value="LRU")
         policy_combo = ttk.Combobox(config_frame, textvariable=self.policy_var,
-                                   values=["LRU", "FIFO", "Random"], state="readonly", width=8)
+                                   values=["LRU", "FIFO"], state="readonly", width=8)
         policy_combo.grid(row=3, column=1, padx=5, pady=2)
         policy_combo.bind('<<ComboboxSelected>>', self.update_cache_config)
         ttk.Button(config_frame, text="Apply Config", 
@@ -474,7 +474,8 @@ Colors:
                         fifo_way = way
             return fifo_way
         else:
-            return random.randint(0, self.associativity - 1)
+            # Deterministic fallback: pick way 0 when policy not recognized
+            return 0
         """Find the way to replace using the current replacement policy"""
         cache_set = self.cache_state[set_index]
         for way in range(self.associativity):
@@ -497,7 +498,8 @@ Colors:
                     fifo_way = way
             return fifo_way
         else:
-            return random.randint(0, self.associativity - 1)
+            # Deterministic fallback: pick way 0 when policy not recognized
+            return 0
     def load_trace_file(self):
         """Load a trace file"""
         filename = filedialog.askopenfilename(
