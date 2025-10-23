@@ -50,7 +50,8 @@ struct TraceResults {
 enum ReplacementPolicy {
     LRU = 0,
     FIFO = 1,
-    RANDOM = 2
+    RANDOM = 2,
+    MRU = 3
 };
 
 
@@ -179,6 +180,22 @@ struct CacheSet {
         static mt19937 gen(rd());
         uniform_int_distribution<> dis(0, lines.size() - 1);
         return dis(gen);
+    }
+
+    int findMRULine() {
+        int mru_index = -1;
+        unsigned int max_counter = 0;
+
+        // Find the line with the highest (most recent) counter value
+        for (size_t i = 0; i < lines.size(); i++) {
+            if (lines[i].valid && lines[i].lru_counter > max_counter) {
+                max_counter = lines[i].lru_counter;
+                mru_index = i;
+            }
+        }
+        
+        // If no valid lines found (shouldn't happen), return 0
+        return (mru_index != -1) ? mru_index : 0;
     }
 };
 

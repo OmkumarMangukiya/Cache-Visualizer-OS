@@ -91,7 +91,7 @@ Or on Windows:
         """Configure the cache with specified parameters"""
         if not self.simulator:
             raise RuntimeError("Simulator not created. Call create_simulator() first.")
-        policy_map = {"LRU": 0, "FIFO": 1, "Random": 2}
+        policy_map = {"LRU": 0, "FIFO": 1, "Random": 2, "MRU": 3}
         policy_int = policy_map.get(policy.upper(), 0)
         result = self.lib.configure_cache(
             self.simulator, cache_size, block_size, associativity, policy_int
