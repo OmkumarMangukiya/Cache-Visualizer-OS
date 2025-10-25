@@ -399,6 +399,8 @@ int SetAssociativeCache::findEvictionLine(CacheSet& set) {
             return set.findFIFOLine();
         case RANDOM:
             return set.findRandomLine();
+        case MRU:
+            return set.findMRULine();
         default:
             return set.findLRULine();
     }
@@ -410,11 +412,14 @@ void SetAssociativeCache::updateReplacementCounters(CacheSet& set, int line_inde
         case LRU:
             set.lines[line_index].updateLRU(global_lru_counter++);
             break;
+        case MRU:
+            set.lines[line_index].updateLRU(global_lru_counter++);
+            break;
         case FIFO:
-
+            // FIFO doesn't update counters on access
             break;
         case RANDOM:
-
+            // Random doesn't use counters
             break;
     }
 }
@@ -425,11 +430,14 @@ void SetAssociativeCache::initializeBlockCounters(CacheSet& set, int line_index)
         case LRU:
             set.lines[line_index].updateLRU(global_lru_counter++);
             break;
+        case MRU:
+            set.lines[line_index].updateLRU(global_lru_counter++);
+            break;
         case FIFO:
             set.lines[line_index].updateFIFO(global_fifo_timestamp++);
             break;
         case RANDOM:
-
+            // Random doesn't use counters
             break;
     }
 }

@@ -80,7 +80,7 @@ class CacheVisualizer:
         ttk.Label(config_frame, text="Replacement Policy:").grid(row=3, column=0, sticky=tk.W, pady=2)
         self.policy_var = tk.StringVar(value="LRU")
         policy_combo = ttk.Combobox(config_frame, textvariable=self.policy_var,
-                                   values=["LRU", "FIFO", "Random"], state="readonly", width=8)
+                                   values=["LRU", "FIFO", "MRU"], state="readonly", width=8)
         policy_combo.grid(row=3, column=1, padx=5, pady=2)
         policy_combo.bind('<<ComboboxSelected>>', self.update_cache_config)
         ttk.Button(config_frame, text="Apply Config", 
@@ -473,31 +473,18 @@ Colors:
                         min_time = access_time
                         fifo_way = way
             return fifo_way
-        else:
-            return random.randint(0, self.associativity - 1)
-        """Find the way to replace using the current replacement policy"""
-        cache_set = self.cache_state[set_index]
-        for way in range(self.associativity):
-            if not cache_set[way]['valid']:
-                return way
-        if self.replacement_policy == "LRU":
-            min_counter = float('inf')
-            lru_way = 0
+        elif self.replacement_policy == "MRU":
+            max_counter = -1
+            mru_way = 0
             for way in range(self.associativity):
-                if cache_set[way]['lru_counter'] < min_counter:
-                    min_counter = cache_set[way]['lru_counter']
-                    lru_way = way
-            return lru_way
-        elif self.replacement_policy == "FIFO":
-            min_time = float('inf')
-            fifo_way = 0
-            for way in range(self.associativity):
-                if cache_set[way]['access_time'] < min_time:
-                    min_time = cache_set[way]['access_time']
-                    fifo_way = way
-            return fifo_way
+                if way in cache_set:
+                    counter = cache_set[way].get('lru_counter', 0)
+                    if counter > max_counter:
+                        max_counter = counter
+                        mru_way = way
+            return mru_way
         else:
-            return random.randint(0, self.associativity - 1)
+            return 0
     def load_trace_file(self):
         """Load a trace file"""
         filename = filedialog.askopenfilename(
